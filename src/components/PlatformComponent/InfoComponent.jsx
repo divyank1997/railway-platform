@@ -1,3 +1,5 @@
+import "./commonStyles.css";
+import PropTypes from "prop-types";
 const InfoComponent = ({
   platformInput = 2,
   handleFileUpload = () => {},
@@ -6,37 +8,34 @@ const InfoComponent = ({
   currentTime,
 }) => {
   return (
-    <>
-      <h1>Train Status Dashboard</h1>
-      <p>Current Time: {currentTime.toLocaleTimeString()}</p>
-
-      <div>
-        <div>
-          <label>
-            Number of Platforms (2-20):
-            <input
-              type="number"
-              placeholder="Enter Number Between 2 and 20"
-              value={platformInput}
-              onChange={handlePlatformNumber}
-            />
-          </label>
-          <button onClick={handlePlatformSubmit}>Update Platforms</button>
-        </div>
-
-        <div>
-          <label>
-            Upload Train Schedule (CSV):
-            <input type="file" accept=".csv" onChange={handleFileUpload} />
-          </label>
-        </div>
-
-        <div>
-          <p>Active Platforms: {platformInput}</p>
-        </div>
+    <div>
+      <p className="text-primary">Number of Platform</p>
+      <div className="input-container">
+        <input
+          className="input-primary"
+          type="number"
+          placeholder="Enter Number Between 2 and 20"
+          value={platformInput}
+          onChange={handlePlatformNumber}
+        />
+        <button className="button-secondary" onClick={handlePlatformSubmit}>
+          Submit
+        </button>
       </div>
-    </>
+    </div>
   );
+};
+
+InfoComponent.propTypes = {
+  platformInput: PropTypes.number,
+  handleFileUpload: PropTypes.func,
+  handlePlatformNumber: PropTypes.func,
+  handlePlatformSubmit: PropTypes.func,
+  currentTime: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+  ]),
 };
 
 export default InfoComponent;
