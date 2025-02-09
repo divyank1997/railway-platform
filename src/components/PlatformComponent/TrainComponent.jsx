@@ -1,12 +1,14 @@
 import "./commonStyles.css";
 import PropTypes from "prop-types";
-const TrainComponent = ({ key, singleTrainData }) => {
+const TrainComponent = ({ key, singleTrainData = {} }) => {
   const { trainNumber, priority, actualArrival, status } = singleTrainData;
   return (
-    <div className="train-card" key={key}>
+    <div
+      className={`train-card ${Object.keys(singleTrainData).length > 0 ? "visible" : "exit"}`}
+      key={key}
+    >
       <div className="train-info">
         <span className="train-number">{trainNumber}</span>
-        <span className="train-priority">{priority}</span>
       </div>
       <div className="train-arrival">{actualArrival}</div>
     </div>

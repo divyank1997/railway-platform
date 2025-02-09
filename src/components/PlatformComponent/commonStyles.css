@@ -72,6 +72,7 @@
   font-size: 18px;
   line-height: 20px;
   color: white;
+  padding-bottom: 10px;
 }
 
 .platform-display-container {
@@ -89,8 +90,29 @@
   align-items: center;
   gap: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative;
+  position: absolute;
   min-width: 250px;
+  top: -20px;
+  left: 75px;
+  animation: moveSmoothly 3s ease-in-out forwards;
+}
+
+.train-card-div.visible {
+  animation: moveSmoothly 3s ease-in-out forwards;
+  opacity: 1;
+}
+
+.train-card-div.exit {
+  animation: moveOut 3s ease-in-out forwards;
+  opacity: 0;
+}
+@keyframes moveSmoothly {
+  from {
+    left: calc(100% - 100px);
+  }
+  to {
+    left: 0;
+  }
 }
 
 .train-info {

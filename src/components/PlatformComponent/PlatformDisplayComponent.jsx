@@ -2,46 +2,52 @@ import "./commonStyles.css";
 import TrainComponent from "./TrainComponent";
 import { STATUS_OBJ } from "../../helper";
 import PinIcon from "../../assets/pin.png";
+import RailywayTrack from "../../assets/railwayTrack.png";
 import PropTypes from "prop-types";
 const PlatformDisplayComponent = ({ trainData = [], numberOfPlatform }) => {
-  const arr = Array.from({ length: numberOfPlatform }, (_, i) => i);
+  const arr = Array.from({ length: numberOfPlatform }, (_, i) => i + 1);
   const getCorrectTrain = (platformNo) => {
-    const train = trainData.find(
+    const trainToFind = trainData.find(
       (train) =>
-        (train.status =
-          STATUS_OBJ["AT_PLATFORM"] &&
-          Number(platformNo) === Number(trainData.platformNumber))
+        train.trainStatus === "AT_PLATFORM" &&
+        Number(platformNo) === Number(train.platformNumber)
     );
-    console.log(train, "trainrani", trainData, platformNo);
-    if (!train) {
+    console.log(
+      trainToFind,
+      "trainrani",
+      trainData,
+      platformNo,
+      STATUS_OBJ?.["AT_PLATFORM"]
+    );
+    if (!trainToFind) {
       return "";
     }
-    return <TrainComponent key={train.trainNumber} singleTrainData={train} />;
+    return (
+      <TrainComponent
+        key={trainToFind?.trainNumber}
+        singleTrainData={trainToFind}
+      />
+    );
   };
   return (
     <div className="platform-display-container">
       {arr.map((platformNo) => {
         return (
           <div key={platformNo}>
-            <p className="text-primary">
+            <p className="text-primary" style={{ textAlign: "left" }}>
               <img src={PinIcon} />
               {platformNo}
             </p>
-            <div> {getCorrectTrain(platformNo)}</div>
-            {/* {status === STATUS_OBJ["AT_PLATFORM"] &&  (
-                <TrainComponent key={trainNumber} singleTrainData={train} />
-              )} */}
+            <div style={{ position: "relative" }}>
+              {" "}
+              {getCorrectTrain(platformNo)}
+            </div>
+            <div style={{ paddingTop: "15px" }}>
+              <img src={RailywayTrack} />
+            </div>
           </div>
         );
       })}
-      {/* {trainData.map((train) => {
-        const { trainNumber, status } = train;
-        return (
-          status === STATUS_OBJ["AT_PLATFORM"] && (
-            <TrainComponent key={trainNumber} singleTrainData={train} />
-          )
-        );
-      })} */}
     </div>
   );
 };

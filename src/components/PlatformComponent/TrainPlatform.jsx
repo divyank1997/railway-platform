@@ -2,7 +2,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import DashboardComponent from "../Dashboard/DashboardComponent";
 import InfoComponent from "./InfoComponent";
-import { PriorityQueue, STATUS_OBJ } from "../../helper";
+import {
+  PriorityQueue,
+  STATUS_OBJ,
+  findHeaderIndex,
+  formatTime,
+} from "../../helper";
 import "./commonStyles.css";
 import UploadImg from "../../assets/upload.png";
 import PlatformDisplayComponent from "./PlatformDisplayComponent";
@@ -10,7 +15,6 @@ const TrainPlatform = () => {
   const [platformInput, setPlatformInput] = useState(2);
   const [trainData, setTrainData] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [error, setError] = useState(null);
   const timeToDate = useCallback((timeStr) => {
     const [hours, minutes] = timeStr.split(":").map((item) => Number(item));
     const date = new Date();
@@ -42,50 +46,37 @@ const TrainPlatform = () => {
     (train, currentTime) => {
       // Validate input
       if (!train || !currentTime) {
-        console.error("Invalid train or current time:", { train, currentTime });
-        return STATUS_OBJ.SCHEDULED;
+        return "Not Available";
       }
 
-      try {
-        const arrivalTime = timeToDate(train.actualArrival);
-        const departureTime = timeToDate(train.actualDeparture);
+      const arrivalTime = timeToDate(train.actualArrival);
+      const departureTime = timeToDate(train.actualDeparture);
 
-        let status;
-        if (currentTime < arrivalTime) {
-          status = STATUS_OBJ.SCHEDULED;
-        } else if (currentTime >= arrivalTime && currentTime < departureTime) {
-          status = STATUS_OBJ.AT_PLATFORM;
-        } else {
-          status = STATUS_OBJ.DEPARTED;
-        }
-
-        return status;
-      } catch (err) {
-        console.error("Error determining train status:", err);
-        return STATUS_OBJ.SCHEDULED;
+      let status = "";
+      if (currentTime < arrivalTime) {
+        status = STATUS_OBJ.SCHEDULED;
+      } else if (currentTime >= arrivalTime && currentTime < departureTime) {
+        status = STATUS_OBJ.AT_PLATFORM;
+      } else {
+        status = STATUS_OBJ.DEPARTED;
       }
+      return status;
     },
     [timeToDate]
   );
 
   const updateTrainStatuses = useCallback(() => {
-    try {
-      const updatedTrains = trainData.map((train) => {
-        // Validate each train object
-        if (!train || typeof train !== "object") {
-          console.error("Invalid train object:", train);
-          return train;
-        }
-        return {
+    const updatedTrains = trainData.map((train) => {
+      return Object.assign(
+        {},
+        {
           ...train,
+          trainStatus: getTrainStatus(train, currentTime),
           status: getTrainStatus(train, currentTime),
-        };
-      });
-      setTrainData(updatedTrains);
-    } catch (err) {
-      console.error("Error updating train statuses:", err);
-      setError("Failed to update train statuses");
-    }
+        }
+      );
+    });
+    setTrainData(updatedTrains);
   }, [trainData, getTrainStatus, currentTime]);
 
   const getNextAvailableTime = useCallback(
@@ -133,28 +124,27 @@ const TrainPlatform = () => {
       const actualDeparture = new Date(
         actualArrival.getTime() + scheduledDuration
       );
-      console.log(
-        getTrainStatus(
-          {
-            actualArrival: dateToTimeString(actualArrival),
-            actualDeparture: dateToTimeString(actualDeparture),
-          },
-          currentTime
-        )
-      );
       return {
         ...train,
         platformNumber: bestPlatform,
         actualArrival: dateToTimeString(actualArrival),
         actualDeparture: dateToTimeString(actualDeparture),
         delay: Math.round((actualArrival - scheduledArrival) / (1000 * 60)),
-        status: getTrainStatus(
+        trainStatus: getTrainStatus(
           {
             actualArrival: dateToTimeString(actualArrival),
             actualDeparture: dateToTimeString(actualDeparture),
           },
           currentTime
         ),
+        status:
+          getTrainStatus(
+            {
+              actualArrival: dateToTimeString(actualArrival),
+              actualDeparture: dateToTimeString(actualDeparture),
+            },
+            currentTime
+          ) || "",
       };
     },
     [
@@ -173,16 +163,47 @@ const TrainPlatform = () => {
 
       try {
         const text = await file.text();
-        const fileData = text
-          .split("\n")
-          .filter((line, index) => index > 0 && line.trim());
+        const fileData = text.split("\n").filter((line, index) => line.trim());
 
+        if (fileData.length <= 1) {
+          console.log("CSV file is empty or contains only headers");
+          return [];
+        }
         const trainQueue = new PriorityQueue();
+        const headerData = fileData[0].split(",").map((h) => h.trim());
+        const trainNumberIndex = findHeaderIndex(headerData, "trainNumber");
+        const arrivalIndex = findHeaderIndex(headerData, "scheduledArrival");
+        const departureIndex = findHeaderIndex(
+          headerData,
+          "scheduledDeparture"
+        );
+        const priorityIndex = findHeaderIndex(headerData, "priority");
 
-        // Add trains to priority queue
+        // Validate required column indices
+        if (
+          trainNumberIndex === -1 ||
+          arrivalIndex === -1 ||
+          departureIndex === -1
+        ) {
+          alert("Missing Required Fields");
+          return [];
+        }
         fileData.forEach((line) => {
-          const [trainNumber, scheduledArrival, scheduledDeparture, priority] =
-            line.split(",").map((item) => item.trim());
+          const values = line.split(",").map((v) => v.trim());
+
+          if (
+            values.length <=
+            Math.max(trainNumberIndex, arrivalIndex, departureIndex)
+          ) {
+            return;
+          }
+
+          // Parse and validate train data
+          const trainNumber = values[trainNumberIndex];
+          const scheduledArrival = formatTime(values[arrivalIndex]);
+          const scheduledDeparture = formatTime(values[departureIndex]);
+          const priority = priorityIndex !== -1 ? values[priorityIndex] : "P3";
+
           trainQueue.enqueue({
             trainNumber,
             scheduledArrival,
@@ -191,7 +212,6 @@ const TrainPlatform = () => {
           });
         });
 
-        // Allocate platforms based on priority queue
         const allocatedTrains = [];
         while (!trainQueue.isEmpty()) {
           const train = trainQueue.dequeue();
@@ -202,7 +222,6 @@ const TrainPlatform = () => {
           );
           allocatedTrains.push(allocatedTrain);
         }
-        console.log(allocatedTrains, "alloasldasldlos");
         setTrainData(allocatedTrains);
       } catch (error) {
         console.error("Error processing file:", error);
@@ -214,11 +233,9 @@ const TrainPlatform = () => {
   const handlePlatformSubmit = useCallback(() => {
     if (platformInput >= 2 && platformInput <= 20) {
       if (trainData.length > 0) {
-        // Create new priority queue with existing trains
         const priorityQueue = new PriorityQueue();
         trainData.forEach((train) => priorityQueue.enqueue(train));
 
-        // Reallocate platforms
         const newAllocatedTrains = [];
         while (!priorityQueue.isEmpty()) {
           const train = priorityQueue.dequeue();
