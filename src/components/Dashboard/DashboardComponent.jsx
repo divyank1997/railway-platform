@@ -1,5 +1,8 @@
 import "./DashboardStyles.css";
 import PropTypes from "prop-types";
+import EmptyTrain from "../../assets/EmptyTrain.png";
+import { STATUS_TO_TEXT } from "../../helper";
+
 const DashboardComponent = ({ trainData = [] }) => {
   return (
     <div className="dashboard-table-container">
@@ -30,14 +33,16 @@ const DashboardComponent = ({ trainData = [] }) => {
                 <td className="dashboard-row">{train.scheduledDeparture}</td>
                 <td className="dashboard-row">{train.actualDeparture}</td>
                 <td className="dashboard-row">{train.delay}</td>
-                <td className="dashboard-row">{train.status}</td>
+                <td className="dashboard-row">
+                  {STATUS_TO_TEXT[train.status]}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
         <div className="empty-dashboard-container">
-          <p>No train history available. Please upload a CSV file.</p>
+          <p className="empty-text">Upload data to view charts</p>
         </div>
       )}
     </div>

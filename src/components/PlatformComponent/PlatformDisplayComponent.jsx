@@ -1,23 +1,17 @@
 import "./commonStyles.css";
 import TrainComponent from "./TrainComponent";
-import { STATUS_OBJ } from "../../helper";
+import { findLastDepartedTrain, STATUS_OBJ } from "../../helper";
 import PinIcon from "../../assets/pin.png";
 import RailywayTrack from "../../assets/railwayTrack.png";
 import PropTypes from "prop-types";
 const PlatformDisplayComponent = ({ trainData = [], numberOfPlatform }) => {
   const arr = Array.from({ length: numberOfPlatform }, (_, i) => i + 1);
   const getCorrectTrain = (platformNo) => {
+    console.log(trainData, platformNo);
     const trainToFind = trainData.find(
       (train) =>
         train.trainStatus === "AT_PLATFORM" &&
         Number(platformNo) === Number(train.platformNumber)
-    );
-    console.log(
-      trainToFind,
-      "trainrani",
-      trainData,
-      platformNo,
-      STATUS_OBJ?.["AT_PLATFORM"]
     );
     if (!trainToFind) {
       return "";
@@ -33,10 +27,16 @@ const PlatformDisplayComponent = ({ trainData = [], numberOfPlatform }) => {
     <div className="platform-display-container">
       {arr.map((platformNo) => {
         return (
-          <div key={platformNo}>
-            <p className="text-primary" style={{ textAlign: "left" }}>
+          <div key={platformNo} className="platform-items">
+            <p
+              className="text-primary padding-b-25"
+              style={{ textAlign: "left" }}
+            >
               <img src={PinIcon} />
-              {platformNo}
+              Platform {platformNo}{" "}
+              {findLastDepartedTrain(trainData, platformNo) &&
+                "- Just Departed :"}
+              {findLastDepartedTrain(trainData, platformNo)}
             </p>
             <div style={{ position: "relative" }}>
               {" "}

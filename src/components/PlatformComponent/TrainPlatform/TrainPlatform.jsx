@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import DashboardComponent from "../Dashboard/DashboardComponent";
-import InfoComponent from "./InfoComponent";
+import DashboardComponent from "../../Dashboard/DashboardComponent";
+import InfoComponent from "../InfoComponent";
 import {
   PriorityQueue,
   STATUS_OBJ,
   findHeaderIndex,
   formatTime,
-} from "../../helper";
-import "./commonStyles.css";
-import UploadImg from "../../assets/upload.png";
-import PlatformDisplayComponent from "./PlatformDisplayComponent";
+} from "../../../helper";
+import "../commonStyles.css";
+import UploadImg from "../../../assets/upload.png";
+import PlatformDisplayComponent from "../PlatformDisplayComponent";
 const TrainPlatform = () => {
   const [platformInput, setPlatformInput] = useState(2);
   const [trainData, setTrainData] = useState([]);
@@ -44,7 +44,6 @@ const TrainPlatform = () => {
 
   const getTrainStatus = useCallback(
     (train, currentTime) => {
-      // Validate input
       if (!train || !currentTime) {
         return "Not Available";
       }
@@ -170,7 +169,9 @@ const TrainPlatform = () => {
           return [];
         }
         const trainQueue = new PriorityQueue();
-        const headerData = fileData[0].split(",").map((h) => h.trim());
+        const headerData = fileData[0]
+          .split(",")
+          .map((headerItem) => headerItem.trim());
         const trainNumberIndex = findHeaderIndex(headerData, "trainNumber");
         const arrivalIndex = findHeaderIndex(headerData, "scheduledArrival");
         const departureIndex = findHeaderIndex(
@@ -178,8 +179,13 @@ const TrainPlatform = () => {
           "scheduledDeparture"
         );
         const priorityIndex = findHeaderIndex(headerData, "priority");
-
-        // Validate required column indices
+        console.log(
+          fileData,
+          headerData,
+          trainNumberIndex,
+          arrivalIndex,
+          departureIndex
+        );
         if (
           trainNumberIndex === -1 ||
           arrivalIndex === -1 ||
@@ -188,28 +194,30 @@ const TrainPlatform = () => {
           alert("Missing Required Fields");
           return [];
         }
-        fileData.forEach((line) => {
-          const values = line.split(",").map((v) => v.trim());
+        fileData.forEach((line, index) => {
+          if (index > 0) {
+            const values = line.split(",").map((v) => v.trim());
 
-          if (
-            values.length <=
-            Math.max(trainNumberIndex, arrivalIndex, departureIndex)
-          ) {
-            return;
+            if (
+              values.length <=
+              Math.max(trainNumberIndex, arrivalIndex, departureIndex)
+            ) {
+              return;
+            }
+
+            const trainNumber = values[trainNumberIndex];
+            const scheduledArrival = formatTime(values[arrivalIndex]);
+            const scheduledDeparture = formatTime(values[departureIndex]);
+            const priority =
+              priorityIndex !== -1 ? values[priorityIndex] : "P3";
+
+            trainQueue.enqueue({
+              trainNumber,
+              scheduledArrival,
+              scheduledDeparture,
+              priority,
+            });
           }
-
-          // Parse and validate train data
-          const trainNumber = values[trainNumberIndex];
-          const scheduledArrival = formatTime(values[arrivalIndex]);
-          const scheduledDeparture = formatTime(values[departureIndex]);
-          const priority = priorityIndex !== -1 ? values[priorityIndex] : "P3";
-
-          trainQueue.enqueue({
-            trainNumber,
-            scheduledArrival,
-            scheduledDeparture,
-            priority,
-          });
         });
 
         const allocatedTrains = [];
@@ -222,7 +230,9 @@ const TrainPlatform = () => {
           );
           allocatedTrains.push(allocatedTrain);
         }
-        setTrainData(allocatedTrains);
+        console.log(trainData, "<><><><><><><>", allocatedTrains);
+        const trainDataToSet = [...trainData, ...allocatedTrains];
+        setTrainData(trainDataToSet);
       } catch (error) {
         console.error("Error processing file:", error);
       }
@@ -258,7 +268,7 @@ const TrainPlatform = () => {
 
   const fileInputRef = useRef(null);
   const handleButtonClick = useCallback(() => {
-    fileInputRef.current.click(); // Programmatically trigger file input
+    fileInputRef.current.click();
   }, []);
 
   const dashboardProps = useMemo(
@@ -287,30 +297,34 @@ const TrainPlatform = () => {
   );
 
   return (
-    <div className="platform-container">
-      <div className="dashboard-container">
-        <DashboardComponent {...dashboardProps} />
-        <div className="csvbutton-container">
-          <div>
-            {/* Hidden File Input */}
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleFileUpload}
-            />
+    <div className="main-container">
+      <h1 className="main-heading">Railway Platform Display</h1>
+      <div className="platform-container">
+        <div className="dashboard-container">
+          <DashboardComponent {...dashboardProps} />
+          <div className="csvbutton-container">
+            <div>
+              {/* Hidden File Input */}
+              <input
+                type="file"
+                accept=".csv"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileUpload}
+              />
 
-            {/* Custom Button to Trigger File Input */}
-            <button className="upload-button" onClick={handleButtonClick}>
-              <img src={UploadImg} /> Upload File
-            </button>
+              {/* Custom Button to Trigger File Input */}
+              <button className="upload-button" onClick={handleButtonClick}>
+                <img src={UploadImg} /> Upload File
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="info-container">
-        <InfoComponent {...infoComponentProps} />
-        <PlatformDisplayComponent {...platformDisplayProps} />
+        <div className="info-container">
+          <InfoComponent {...infoComponentProps} />
+          <PlatformDisplayComponent {...platformDisplayProps} />
+        </div>
       </div>
     </div>
   );

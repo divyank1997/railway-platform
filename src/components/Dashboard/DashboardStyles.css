@@ -3,6 +3,10 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  background-image: url("/src/assets/EmptyTrain.png");
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-size: auto; /* Adjust this based on your needs */
 }
 
 .dashboard-table {
@@ -15,6 +19,8 @@
   height: 550px;
   overflow-y: scroll;
   overflow-x: auto;
+  padding-bottom: 20px;
+  margin-top: 10px;
 }
 
 .dashboard-table thead {
@@ -33,13 +39,14 @@
   width: 100px;
   white-space: nowrap;
   box-sizing: border-box;
+  padding-top: 0px;
 }
 
 .dashboard-row {
   padding: 12px 20px;
   border-bottom: 1px solid #eee;
-  min-width: 150px;
-  width: 150px;
+  min-width: 100px;
+  width: 100px;
   white-space: nowrap;
 }
 
@@ -66,4 +73,11 @@
 
 .timeCell {
   color: #e53935;
+}
+
+.empty-text {
+  color: #1231c1;
+  font-size: 26px;
+  line-height: 26px;
+  font-weight: 500;
 }

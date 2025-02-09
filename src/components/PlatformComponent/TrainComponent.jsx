@@ -1,5 +1,6 @@
 import "./commonStyles.css";
 import PropTypes from "prop-types";
+import TrainBox from "../../assets/TrainBox.png";
 const TrainComponent = ({ key, singleTrainData = {} }) => {
   const { trainNumber, priority, actualArrival, status } = singleTrainData;
   return (
@@ -9,8 +10,10 @@ const TrainComponent = ({ key, singleTrainData = {} }) => {
     >
       <div className="train-info">
         <span className="train-number">{trainNumber}</span>
+        <span className="train-arrival">Time - {actualArrival}</span>
       </div>
-      <div className="train-arrival">{actualArrival}</div>
+
+      <img src={TrainBox} />
     </div>
   );
 };

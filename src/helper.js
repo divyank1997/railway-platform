@@ -34,6 +34,12 @@ const STATUS_OBJ = {
   DEPARTED: "DEPARTED",
 };
 
+const STATUS_TO_TEXT = {
+  AT_PLATFORM: "At Platform",
+  SCHEDULED: "Scheduled",
+  DEPARTED: "Departed",
+};
+
 const HEADER_MAPPINGS = {
   trainNumber: [
     "train number",
@@ -76,7 +82,6 @@ const findHeaderIndex = (headers, field) => {
     }
   }
 
-  // Return -1 if no match is found
   return -1;
 };
 
@@ -107,7 +112,7 @@ const formatTime = (timeStr) => {
     return `${hours.padStart(2, "0")}:${minutes}`;
   }
 
-  // Handle compact formats
+  // Handle mix formats
   const mixFormat = time.match(/^(\d{1,2})(\d{2})$/);
   if (mixFormat) {
     let [, hours, minutes] = mixFormat;
@@ -119,10 +124,26 @@ const formatTime = (timeStr) => {
   return null;
 };
 
+const findLastDepartedTrain = (trainData, platformNumber) => {
+  // Reverse iteration to find the last departed train (maintaining original priority order)
+  for (let i = trainData.length - 1; i >= 0; i--) {
+    const train = trainData[i];
+    if (
+      train.platformNumber === platformNumber &&
+      train.status === STATUS_OBJ.DEPARTED
+    ) {
+      return train.trainNumber;
+    }
+  }
+  return null;
+};
+
 export {
   PriorityQueue,
   STATUS_OBJ,
   HEADER_MAPPINGS,
   findHeaderIndex,
   formatTime,
+  STATUS_TO_TEXT,
+  findLastDepartedTrain,
 };

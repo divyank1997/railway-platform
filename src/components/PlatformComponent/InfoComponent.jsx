@@ -8,7 +8,8 @@ const InfoComponent = ({
   currentTime,
 }) => {
   return (
-    <div>
+    <div className="input-button-container">
+      {" "}
       <p className="text-primary">Number of Platform</p>
       <div className="input-container">
         <input

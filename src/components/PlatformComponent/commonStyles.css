@@ -1,4 +1,7 @@
 .platform-container {
+  display: flex;
+}
+.main-container {
   background-image: url("/src/assets/train.png");
   background-size: cover;
   background-position: center;
@@ -6,11 +9,19 @@
   width: 100%;
   height: 100vh;
   padding: 20px;
-  display: flex;
+}
+
+.main-heading {
+  margin: 0;
+  color: #6fd1ee;
+  margin-bottom: 15px;
+  text-align: left;
+  font-size: 30px;
 }
 
 .upload-button {
   width: 90%;
+  margin-top: 30px;
   padding: 12px;
   background-color: #243fd1;
   color: white;
@@ -25,7 +36,7 @@
 }
 
 .dashboard-container {
-  min-height: 700px;
+  height: 700px;
   width: 45%;
   background: white;
   border-radius: 4px;
@@ -40,6 +51,15 @@
   align-items: center;
   justify-content: center;
 }
+
+.input-button-container {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 50%;
+  padding-left: 30px;
+}
 .csvbutton-container {
   display: flex;
   justify-content: center;
@@ -49,8 +69,8 @@
   margin: 0;
   font-size: 16px;
   line-height: 18px;
-  color: white;
   margin: 15px;
+  color: #6fd1ee;
   background: none;
   border: none;
   font-weight: 600;
@@ -67,12 +87,14 @@
   width: 220px;
 }
 .text-primary {
-  margin: 10px;
+  margin: 0;
   color: white;
   font-size: 18px;
   line-height: 20px;
   color: white;
   padding-bottom: 10px;
+}
+.padding-bottom {
 }
 
 .platform-display-container {
@@ -80,10 +102,12 @@
   flex-flow: column;
   align-items: flex-start;
   padding: 20px;
+  overflow-y: auto;
+  height: 560px;
+  padding-left: 30px;
 }
 
 .train-card {
-  background-color: white;
   border-radius: 25px;
   padding: 10px 20px;
   display: inline-flex;
@@ -120,19 +144,13 @@
   align-items: center;
   gap: 8px;
   padding: 4px;
+  position: absolute;
+  left: 40%;
 }
 
 .train-number {
   font-weight: 500;
   color: #243fd1;
-}
-
-.train-priority {
-  background-color: #243fd1;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 14px;
 }
 
 .train-arrival {
@@ -142,11 +160,11 @@
   padding-left: 12px;
 }
 
-.train-arrival::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  height: 100%;
-  width: 1px;
-  background-color: #ddd;
+.platform-items {
+  height: 140px;
+  flex-shrink: 0;
+}
+
+.padding-b-25 {
+  padding-bottom: 25px;
 }
