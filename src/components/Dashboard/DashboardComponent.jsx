@@ -1,6 +1,6 @@
 import "./DashboardStyles.css";
 import PropTypes from "prop-types";
-import { TRAIN_STATUS_TO_TEXT } from "../../Constant";
+import { TRAIN_STATUS_TO_TEXT } from "../../constant";
 
 const DashboardComponent = ({ trainData = [] }) => {
   return (
