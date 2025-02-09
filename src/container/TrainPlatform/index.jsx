@@ -1,9 +1,9 @@
 import React from "react";
-import DashboardComponent from "../Dashboard/DashboardComponent";
-import InfoComponent from "../PlatformComponent/InfoComponent";
+import DashboardComponent from "../../components/Dashboard/DashboardComponent";
+import InfoComponent from "../../components/PlatformComponent/InfoComponent";
 import "../commonScreenStyles.css";
 import UploadImg from "../../assets/upload.png";
-import PlatformDisplayComponent from "../PlatformComponent/PlatformDisplayComponent";
+import PlatformDisplayComponent from "../../components/PlatformComponent/PlatformDisplayComponent";
 import { useTrainPlatform } from "./usePlatformHook";
 
 const TrainPlatform = () => {
