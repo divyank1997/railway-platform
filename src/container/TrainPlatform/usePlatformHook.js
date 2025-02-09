@@ -5,7 +5,7 @@ import {
   formatTime,
   PriorityQueue,
 } from "../../helperFunctions";
-import { TRAIN_STATUS } from "../../Constant";
+import { PRIORITY_ARR, TRAIN_STATUS } from "../../constant";
 export const useTrainPlatform = () => {
   const [platformInput, setPlatformInput] = useState(2);
   const [trainData, setTrainData] = useState([]);
@@ -201,8 +201,11 @@ export const useTrainPlatform = () => {
             const scheduledArrival = formatTime(values[arrivalIndex]);
             const scheduledDeparture = formatTime(values[departureIndex]);
             const priority =
-              priorityIndex !== -1 ? values[priorityIndex] : "P3";
-
+              priorityIndex !== -1 &&
+              PRIORITY_ARR.includes(values[priorityIndex])
+                ? values[priorityIndex]
+                : "P3";
+            console.log(priority, "proptssadkl", values, priorityIndex);
             trainQueue.enqueue({
               trainNumber,
               scheduledArrival,

@@ -38,4 +38,11 @@ const HEADER_DATA_MAPPING = {
   priority: ["priority", "train priority", "train_priority", "pri"],
 };
 
-export { HEADER_DATA_MAPPING, TRAIN_STATUS, TRAIN_STATUS_TO_TEXT };
+const PRIORITY_ARR = ["P1", "P2", "P3"];
+
+export {
+  HEADER_DATA_MAPPING,
+  TRAIN_STATUS,
+  TRAIN_STATUS_TO_TEXT,
+  PRIORITY_ARR,
+};

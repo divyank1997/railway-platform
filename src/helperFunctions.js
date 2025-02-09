@@ -1,4 +1,4 @@
-import { HEADER_DATA_MAPPING, TRAIN_STATUS } from "./Constant";
+import { HEADER_DATA_MAPPING, TRAIN_STATUS } from "./constant";
 
 class PriorityQueue {
   constructor() {
