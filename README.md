@@ -8,3 +8,11 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 To Start the project - npm install && npm run dev
+
+
+Notes :-
+
+Product Features :-
+
+Handled Multiple CSV imports - added checks for reordered headers , different time formats and invalid fields
+Added Dashboards and Train animation ui 
