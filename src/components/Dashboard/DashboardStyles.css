@@ -6,7 +6,7 @@
   background-image: url("/src/assets/EmptyTrain.png");
   background-repeat: no-repeat;
   background-position: bottom right;
-  background-size: auto; /* Adjust this based on your needs */
+  background-size: auto;
 }
 
 .dashboard-table {

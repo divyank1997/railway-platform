@@ -1,12 +1,10 @@
 import "./DashboardStyles.css";
 import PropTypes from "prop-types";
-import EmptyTrain from "../../assets/EmptyTrain.png";
-import { STATUS_TO_TEXT } from "../../helper";
+import { STATUS_TO_TEXT } from "../../Constant";
 
 const DashboardComponent = ({ trainData = [] }) => {
   return (
     <div className="dashboard-table-container">
-      {" "}
       {trainData.length > 0 ? (
         <table className="dashboard-table">
           <thead>
@@ -24,7 +22,17 @@ const DashboardComponent = ({ trainData = [] }) => {
           </thead>
           <tbody>
             {trainData.map((train) => (
-              <tr key={train.trainNumber}>
+              <tr
+                key={train.trainNumber}
+                style={{
+                  backgroundColor:
+                    train.status === "DEPARTED"
+                      ? "#FF00481A"
+                      : train.status === "AT_PLATFORM"
+                        ? "#6FD1EE1A"
+                        : "NONE",
+                }}
+              >
                 <td className="dashboard-row">{train.trainNumber}</td>
                 <td className="dashboard-row">{train.priority}</td>
                 <td className="dashboard-row">{train.platformNumber}</td>

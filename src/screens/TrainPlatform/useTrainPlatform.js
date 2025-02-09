@@ -1,20 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 
-import DashboardComponent from "../../Dashboard/DashboardComponent";
-import InfoComponent from "../InfoComponent";
-import {
-  PriorityQueue,
-  STATUS_OBJ,
-  findHeaderIndex,
-  formatTime,
-} from "../../../helper";
-import "../commonStyles.css";
-import UploadImg from "../../../assets/upload.png";
-import PlatformDisplayComponent from "../PlatformDisplayComponent";
-const TrainPlatform = () => {
+import { findHeaderIndex, formatTime, PriorityQueue } from "../../helper";
+import { STATUS_OBJ } from "../../Constant";
+export const useTrainPlatform = () => {
   const [platformInput, setPlatformInput] = useState(2);
   const [trainData, setTrainData] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
+
   const timeToDate = useCallback((timeStr) => {
     const [hours, minutes] = timeStr.split(":").map((item) => Number(item));
     const date = new Date();
@@ -105,7 +97,7 @@ const TrainPlatform = () => {
         timeToDate(train.scheduledArrival);
 
       let bestPlatform = 1;
-      let earliestPossibleStart = new Date(8640000000000000);
+      let earliestPossibleStart = null;
 
       for (let platform = 1; platform <= numPlatforms; platform++) {
         const nextAvailable = getNextAvailableTime(
@@ -113,7 +105,10 @@ const TrainPlatform = () => {
           scheduledArrival,
           allocatedTrains
         );
-        if (nextAvailable < earliestPossibleStart) {
+        if (
+          nextAvailable < earliestPossibleStart ||
+          earliestPossibleStart === null
+        ) {
           earliestPossibleStart = nextAvailable;
           bestPlatform = platform;
         }
@@ -179,13 +174,6 @@ const TrainPlatform = () => {
           "scheduledDeparture"
         );
         const priorityIndex = findHeaderIndex(headerData, "priority");
-        console.log(
-          fileData,
-          headerData,
-          trainNumberIndex,
-          arrivalIndex,
-          departureIndex
-        );
         if (
           trainNumberIndex === -1 ||
           arrivalIndex === -1 ||
@@ -230,7 +218,7 @@ const TrainPlatform = () => {
           );
           allocatedTrains.push(allocatedTrain);
         }
-        console.log(trainData, "<><><><><><><>", allocatedTrains);
+
         const trainDataToSet = [...trainData, ...allocatedTrains];
         setTrainData(trainDataToSet);
       } catch (error) {
@@ -259,11 +247,14 @@ const TrainPlatform = () => {
 
         setTrainData(newAllocatedTrains);
       }
+    } else {
+      alert("Please Enter Number Between 2 and 20");
     }
   }, [allocatePlatformAndTime, platformInput, trainData]);
 
   const handlePlatformNumber = useCallback((e) => {
-    setPlatformInput(e.target.value);
+    const { value } = e.target;
+    if (value > 2 && value < 20) setPlatformInput(value);
   }, []);
 
   const fileInputRef = useRef(null);
@@ -296,38 +287,12 @@ const TrainPlatform = () => {
     [trainData, platformInput]
   );
 
-  return (
-    <div className="main-container">
-      <h1 className="main-heading">Railway Platform Display</h1>
-      <div className="platform-container">
-        <div className="dashboard-container">
-          <DashboardComponent {...dashboardProps} />
-          <div className="csvbutton-container">
-            <div>
-              {/* Hidden File Input */}
-              <input
-                type="file"
-                accept=".csv"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-                onChange={handleFileUpload}
-              />
-
-              {/* Custom Button to Trigger File Input */}
-              <button className="upload-button" onClick={handleButtonClick}>
-                <img src={UploadImg} /> Upload File
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="info-container">
-          <InfoComponent {...infoComponentProps} />
-          <PlatformDisplayComponent {...platformDisplayProps} />
-        </div>
-      </div>
-    </div>
-  );
+  return {
+    dashboardProps,
+    fileInputRef,
+    handleFileUpload,
+    handleButtonClick,
+    infoComponentProps,
+    platformDisplayProps,
+  };
 };
-
-export default TrainPlatform;

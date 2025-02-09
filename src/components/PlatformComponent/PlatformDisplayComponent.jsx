@@ -1,28 +1,14 @@
 import "./commonStyles.css";
 import TrainComponent from "./TrainComponent";
-import { findLastDepartedTrain, STATUS_OBJ } from "../../helper";
+import { findLastDepartedTrain } from "../../helper";
+import { STATUS_OBJ } from "../../Constant";
 import PinIcon from "../../assets/pin.png";
 import RailywayTrack from "../../assets/railwayTrack.png";
 import PropTypes from "prop-types";
+
 const PlatformDisplayComponent = ({ trainData = [], numberOfPlatform }) => {
   const arr = Array.from({ length: numberOfPlatform }, (_, i) => i + 1);
-  const getCorrectTrain = (platformNo) => {
-    console.log(trainData, platformNo);
-    const trainToFind = trainData.find(
-      (train) =>
-        train.trainStatus === "AT_PLATFORM" &&
-        Number(platformNo) === Number(train.platformNumber)
-    );
-    if (!trainToFind) {
-      return "";
-    }
-    return (
-      <TrainComponent
-        key={trainToFind?.trainNumber}
-        singleTrainData={trainToFind}
-      />
-    );
-  };
+
   return (
     <div className="platform-display-container">
       {arr.map((platformNo) => {
@@ -40,7 +26,7 @@ const PlatformDisplayComponent = ({ trainData = [], numberOfPlatform }) => {
             </p>
             <div style={{ position: "relative" }}>
               {" "}
-              {getCorrectTrain(platformNo)}
+              {getCorrectTrain(platformNo, trainData)}
             </div>
             <div style={{ paddingTop: "15px" }}>
               <img src={RailywayTrack} />
@@ -51,6 +37,7 @@ const PlatformDisplayComponent = ({ trainData = [], numberOfPlatform }) => {
     </div>
   );
 };
+
 PlatformDisplayComponent.propTypes = {
   trainData: PropTypes.arrayOf(
     PropTypes.shape({
@@ -60,6 +47,20 @@ PlatformDisplayComponent.propTypes = {
     })
   ),
   numberOfPlatform: PropTypes.number.isRequired,
+};
+
+const getCorrectTrain = (platformNo, trainData = []) => {
+  const trainToFind = trainData.find(
+    (train) =>
+      train.trainStatus === STATUS_OBJ.AT_PLATFORM &&
+      Number(platformNo) === Number(train.platformNumber)
+  );
+  return (
+    <TrainComponent
+      key={trainToFind?.trainNumber}
+      singleTrainData={trainToFind}
+    />
+  );
 };
 
 export default PlatformDisplayComponent;

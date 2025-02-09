@@ -1,10 +1,12 @@
 import "./commonStyles.css";
 import PropTypes from "prop-types";
 import TrainBox from "../../assets/TrainBox.png";
+
 const TrainComponent = ({ key, singleTrainData = {} }) => {
-  const { trainNumber, priority, actualArrival, status } = singleTrainData;
+  const { trainNumber, actualArrival } = singleTrainData;
   return (
     <div
+      style={{ opacity: Object.keys(singleTrainData).length > 0 ? 1 : 0 }}
       className={`train-card ${Object.keys(singleTrainData).length > 0 ? "visible" : "exit"}`}
       key={key}
     >

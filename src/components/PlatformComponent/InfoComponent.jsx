@@ -1,15 +1,13 @@
 import "./commonStyles.css";
 import PropTypes from "prop-types";
+
 const InfoComponent = ({
   platformInput = 2,
-  handleFileUpload = () => {},
   handlePlatformNumber = () => {},
   handlePlatformSubmit = () => {},
-  currentTime,
 }) => {
   return (
     <div className="input-button-container">
-      {" "}
       <p className="text-primary">Number of Platform</p>
       <div className="input-container">
         <input

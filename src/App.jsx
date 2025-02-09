@@ -1,15 +1,8 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
-import TrainPlatform from "./components/PlatformComponent/TrainPlatform/TrainPlatform";
+import TrainPlatform from "./screens/TrainPlatform";
 
 function App() {
-  return (
-    <>
-      <TrainPlatform />
-    </>
-  );
+  return <TrainPlatform />;
 }
 
 export default App;

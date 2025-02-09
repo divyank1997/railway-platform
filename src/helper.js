@@ -1,3 +1,5 @@
+import { HEADER_MAPPINGS, STATUS_OBJ } from "./Constant";
+
 class PriorityQueue {
   constructor() {
     this.values = [];
@@ -28,47 +30,8 @@ class PriorityQueue {
   }
 }
 
-const STATUS_OBJ = {
-  AT_PLATFORM: "AT_PLATFORM",
-  SCHEDULED: "SCHEDULED",
-  DEPARTED: "DEPARTED",
-};
-
-const STATUS_TO_TEXT = {
-  AT_PLATFORM: "At Platform",
-  SCHEDULED: "Scheduled",
-  DEPARTED: "Departed",
-};
-
-const HEADER_MAPPINGS = {
-  trainNumber: [
-    "train number",
-    "train no",
-    "trainno",
-    "train_number",
-    "trainnumber",
-    "train id",
-  ],
-  scheduledArrival: [
-    "scheduled arrival",
-    "arrival time",
-    "arrivaltime",
-    "scheduled_arrival",
-    "arrival",
-    "arr time",
-  ],
-  scheduledDeparture: [
-    "scheduled departure",
-    "departure time",
-    "departuretime",
-    "scheduled_departure",
-    "departure",
-    "dep time",
-  ],
-  priority: ["priority", "train priority", "train_priority", "pri"],
-};
-
 const findHeaderIndex = (headers, field) => {
+  //function to find index from csv for header order
   const headersToSend = headers.map((header) => header.trim().toLowerCase());
 
   const indexMap = HEADER_MAPPINGS[field] || [];
@@ -125,7 +88,6 @@ const formatTime = (timeStr) => {
 };
 
 const findLastDepartedTrain = (trainData, platformNumber) => {
-  // Reverse iteration to find the last departed train (maintaining original priority order)
   for (let i = trainData.length - 1; i >= 0; i--) {
     const train = trainData[i];
     if (
@@ -138,12 +100,4 @@ const findLastDepartedTrain = (trainData, platformNumber) => {
   return null;
 };
 
-export {
-  PriorityQueue,
-  STATUS_OBJ,
-  HEADER_MAPPINGS,
-  findHeaderIndex,
-  formatTime,
-  STATUS_TO_TEXT,
-  findLastDepartedTrain,
-};
+export { PriorityQueue, findHeaderIndex, formatTime, findLastDepartedTrain };
