@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
-
 import {
   findHeaderIndex,
   formatTime,
@@ -109,6 +108,7 @@ export const useTrainPlatform = () => {
           scheduledArrival,
           allocatedTrains
         );
+
         if (
           nextAvailable < earliestPossibleStart ||
           earliestPossibleStart === null
@@ -161,7 +161,7 @@ export const useTrainPlatform = () => {
 
       try {
         const text = await file.text();
-        const fileData = text.split("\n").filter((line, index) => line.trim());
+        const fileData = text.split("\n").filter((line) => line.trim());
 
         if (fileData.length <= 1) {
           console.log("CSV file is empty or contains only headers");
@@ -205,7 +205,7 @@ export const useTrainPlatform = () => {
               PRIORITY_ARR.includes(values[priorityIndex])
                 ? values[priorityIndex]
                 : "P3";
-            console.log(priority, "proptssadkl", values, priorityIndex);
+
             trainQueue.enqueue({
               trainNumber,
               scheduledArrival,
