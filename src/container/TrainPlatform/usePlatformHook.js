@@ -5,7 +5,7 @@ import {
   formatTime,
   PriorityQueue,
 } from "../../helperFunctions";
-import { STATUS_OBJ } from "../../Constant";
+import { TRAIN_STATUS } from "../../Constant";
 export const useTrainPlatform = () => {
   const [platformInput, setPlatformInput] = useState(2);
   const [trainData, setTrainData] = useState([]);
@@ -49,11 +49,11 @@ export const useTrainPlatform = () => {
 
       let status = "";
       if (currentTime < arrivalTime) {
-        status = STATUS_OBJ.SCHEDULED;
+        status = TRAIN_STATUS.SCHEDULED;
       } else if (currentTime >= arrivalTime && currentTime < departureTime) {
-        status = STATUS_OBJ.AT_PLATFORM;
+        status = TRAIN_STATUS.AT_PLATFORM;
       } else {
-        status = STATUS_OBJ.DEPARTED;
+        status = TRAIN_STATUS.DEPARTED;
       }
       return status;
     },

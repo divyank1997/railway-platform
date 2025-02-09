@@ -1,6 +1,6 @@
 import "./DashboardStyles.css";
 import PropTypes from "prop-types";
-import { STATUS_TO_TEXT } from "../../Constant";
+import { TRAIN_STATUS_TO_TEXT } from "../../Constant";
 
 const DashboardComponent = ({ trainData = [] }) => {
   return (
@@ -42,7 +42,7 @@ const DashboardComponent = ({ trainData = [] }) => {
                 <td className="dashboard-row">{train.actualDeparture}</td>
                 <td className="dashboard-row">{train.delay}</td>
                 <td className="dashboard-row">
-                  {STATUS_TO_TEXT[train.status]}
+                  {TRAIN_STATUS_TO_TEXT[train.status]}
                 </td>
               </tr>
             ))}

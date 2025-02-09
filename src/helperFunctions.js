@@ -1,4 +1,4 @@
-import { HEADER_MAPPINGS, STATUS_OBJ } from "./Constant";
+import { HEADER_DATA_MAPPING, TRAIN_STATUS } from "./Constant";
 
 class PriorityQueue {
   constructor() {
@@ -33,7 +33,7 @@ const findHeaderIndex = (headers, field) => {
   //function to find index from csv for header order
   const headersToSend = headers.map((header) => header.trim().toLowerCase());
 
-  const indexMap = HEADER_MAPPINGS[field] || [];
+  const indexMap = HEADER_DATA_MAPPING[field] || [];
 
   const headerArr = indexMap.map((name) => name.trim().toLowerCase());
 
@@ -91,7 +91,7 @@ const findLastDepartedTrain = (trainData, platformNumber) => {
     const train = trainData[i];
     if (
       train.platformNumber === platformNumber &&
-      train.status === STATUS_OBJ.DEPARTED
+      train.status === TRAIN_STATUS.DEPARTED
     ) {
       return train.trainNumber;
     }

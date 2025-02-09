@@ -1,16 +1,16 @@
-const STATUS_OBJ = {
+const TRAIN_STATUS = {
   AT_PLATFORM: "AT_PLATFORM",
   SCHEDULED: "SCHEDULED",
   DEPARTED: "DEPARTED",
 };
 
-const STATUS_TO_TEXT = {
+const TRAIN_STATUS_TO_TEXT = {
   AT_PLATFORM: "At Platform",
   SCHEDULED: "Scheduled",
   DEPARTED: "Departed",
 };
 
-const HEADER_MAPPINGS = {
+const HEADER_DATA_MAPPING = {
   trainNumber: [
     "train number",
     "train no",
@@ -38,4 +38,4 @@ const HEADER_MAPPINGS = {
   priority: ["priority", "train priority", "train_priority", "pri"],
 };
 
-export { HEADER_MAPPINGS, STATUS_OBJ, STATUS_TO_TEXT };
+export { HEADER_DATA_MAPPING, TRAIN_STATUS, TRAIN_STATUS_TO_TEXT };

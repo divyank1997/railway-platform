@@ -1,5 +1,5 @@
 import "./App.css";
-import TrainPlatform from "./screens/TrainPlatform";
+import TrainPlatform from "./container/TrainPlatform";
 
 function App() {
   return <TrainPlatform />;

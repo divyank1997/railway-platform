@@ -1,7 +1,7 @@
 import "./commonStyles.css";
 import TrainComponent from "./TrainComponent";
 import { findLastDepartedTrain } from "../../helperFunctions";
-import { STATUS_OBJ } from "../../Constant";
+import { TRAIN_STATUS } from "../../Constant";
 import PinIcon from "../../assets/pin.png";
 import RailywayTrack from "../../assets/railwayTrack.png";
 import PropTypes from "prop-types";
@@ -52,7 +52,7 @@ PlatformDisplayComponent.propTypes = {
 const getCorrectTrain = (platformNo, trainData = []) => {
   const trainToFind = trainData.find(
     (train) =>
-      train.trainStatus === STATUS_OBJ.AT_PLATFORM &&
+      train.trainStatus === TRAIN_STATUS.AT_PLATFORM &&
       Number(platformNo) === Number(train.platformNumber)
   );
   return (
