@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 
-import { findHeaderIndex, formatTime, PriorityQueue } from "../../helper";
+import {
+  findHeaderIndex,
+  formatTime,
+  PriorityQueue,
+} from "../../helperFunctions";
 import { STATUS_OBJ } from "../../Constant";
 export const useTrainPlatform = () => {
   const [platformInput, setPlatformInput] = useState(2);
@@ -73,7 +77,7 @@ export const useTrainPlatform = () => {
   const getNextAvailableTime = useCallback(
     (platform, trainStart, allocatedTrains) => {
       const trainsOnPlatform = allocatedTrains
-        .filter((t) => t.platformNumber === platform)
+        .filter((allocTrain) => allocTrain.platformNumber === platform)
         .sort(
           (a, b) =>
             timeToDate(a.actualDeparture) - timeToDate(b.actualDeparture)
@@ -184,7 +188,7 @@ export const useTrainPlatform = () => {
         }
         fileData.forEach((line, index) => {
           if (index > 0) {
-            const values = line.split(",").map((v) => v.trim());
+            const values = line.split(",").map((val) => val.trim());
 
             if (
               values.length <=

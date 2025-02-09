@@ -20,7 +20,6 @@ class PriorityQueue {
       if (priorityMap[a.priority] !== priorityMap[b.priority]) {
         return priorityMap[a.priority] - priorityMap[b.priority];
       }
-      // If same priority, sort by scheduled arrival time
       return new Date(a.scheduledArrival) - new Date(b.scheduledArrival);
     });
   }

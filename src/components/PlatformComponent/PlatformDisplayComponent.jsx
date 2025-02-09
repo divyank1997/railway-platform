@@ -1,6 +1,6 @@
 import "./commonStyles.css";
 import TrainComponent from "./TrainComponent";
-import { findLastDepartedTrain } from "../../helper";
+import { findLastDepartedTrain } from "../../helperFunctions";
 import { STATUS_OBJ } from "../../Constant";
 import PinIcon from "../../assets/pin.png";
 import RailywayTrack from "../../assets/railwayTrack.png";
