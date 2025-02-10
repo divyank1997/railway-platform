@@ -9,7 +9,7 @@ export const useTrainPlatform = () => {
   const [platformInput, setPlatformInput] = useState(2);
   const [trainData, setTrainData] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
-
+  const [loading, setIsLoading] = useState(false);
   const timeToDate = useCallback((timeStr) => {
     const [hours, minutes] = timeStr.split(":").map((item) => Number(item));
     const date = new Date();
@@ -160,11 +160,13 @@ export const useTrainPlatform = () => {
       if (!file) return;
 
       try {
+        setIsLoading(true);
         const text = await file.text();
         const fileData = text.split("\n").filter((line) => line.trim());
 
         if (fileData.length <= 1) {
-          console.log("CSV file is empty or contains only headers");
+          alert("CSV file is empty or contains only headers");
+          setIsLoading(false);
           return [];
         }
         const trainQueue = new PriorityQueue();
@@ -184,6 +186,7 @@ export const useTrainPlatform = () => {
           departureIndex === -1
         ) {
           alert("Missing Required Fields");
+          setIsLoading(false);
           return [];
         }
         fileData.forEach((line, index) => {
@@ -228,8 +231,11 @@ export const useTrainPlatform = () => {
 
         const trainDataToSet = [...trainData, ...allocatedTrains];
         setTrainData(trainDataToSet);
+        setIsLoading(false);
       } catch (error) {
-        console.error("Error processing file:", error);
+        console.error("Error processing file", error);
+        setIsLoading(false);
+        alert("Error processing file:");
       }
     },
     [allocatePlatformAndTime, platformInput]
@@ -272,8 +278,9 @@ export const useTrainPlatform = () => {
   const dashboardProps = useMemo(
     () => ({
       trainData,
+      loading,
     }),
-    [trainData]
+    [trainData, loading]
   );
 
   const infoComponentProps = useMemo(
@@ -282,16 +289,24 @@ export const useTrainPlatform = () => {
       handlePlatformSubmit,
       platformInput,
       currentTime,
+      loading,
     }),
-    [handlePlatformNumber, handlePlatformSubmit, platformInput, currentTime]
+    [
+      handlePlatformNumber,
+      handlePlatformSubmit,
+      platformInput,
+      currentTime,
+      loading,
+    ]
   );
 
   const platformDisplayProps = useMemo(
     () => ({
       trainData,
       numberOfPlatform: platformInput,
+      loading,
     }),
-    [trainData, platformInput]
+    [trainData, platformInput, loading]
   );
 
   return {
@@ -300,6 +315,7 @@ export const useTrainPlatform = () => {
     handleFileUpload,
     handleButtonClick,
     infoComponentProps,
+    loading,
     platformDisplayProps,
   };
 };

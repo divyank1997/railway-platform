@@ -2,10 +2,12 @@ import "./DashboardStyles.css";
 import PropTypes from "prop-types";
 import { TRAIN_STATUS_TO_TEXT } from "../../constant";
 
-const DashboardComponent = ({ trainData = [] }) => {
+const DashboardComponent = ({ trainData = [], loading }) => {
   return (
     <div className="dashboard-table-container">
-      {trainData.length > 0 ? (
+      {loading ? (
+        <p className="loading-text">Loading Data...</p>
+      ) : trainData.length > 0 ? (
         <table className="dashboard-table">
           <thead>
             <tr>
@@ -71,6 +73,7 @@ DashboardComponent.propTypes = {
       status: PropTypes.string,
     })
   ),
+  loading: PropTypes.bool,
 };
 
 DashboardComponent.defaultProps = {
