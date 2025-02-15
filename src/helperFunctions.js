@@ -20,7 +20,20 @@ class PriorityQueue {
       if (priorityMap[a.priority] !== priorityMap[b.priority]) {
         return priorityMap[a.priority] - priorityMap[b.priority];
       }
-      return new Date(a.scheduledArrival) - new Date(b.scheduledArrival);
+      if (
+        timeToDate(a.scheduledArrival).getTime() !==
+        timeToDate(b.scheduledArrival).getTime()
+      ) {
+        return (
+          timeToDate(a.scheduledArrival).getTime() -
+          timeToDate(b.scheduledArrival).getTime()
+        );
+      } else {
+        return (
+          timeToDate(a.scheduledDeparture).getTime() -
+          timeToDate(b.scheduledDeparture).getTime()
+        );
+      }
     });
   }
 
@@ -99,4 +112,22 @@ const findLastDepartedTrain = (trainData, platformNumber) => {
   return null;
 };
 
-export { PriorityQueue, findHeaderIndex, formatTime, findLastDepartedTrain };
+const timeToDate = (timeStr) => {
+  const [hours, minutes] = timeStr.split(":").map((item) => Number(item));
+  const date = new Date();
+  date.setHours(hours, minutes, 0, 0);
+  return date;
+};
+
+const dateToTimeString = (date) => {
+  return date.toTimeString().substring(0, 5);
+};
+
+export {
+  PriorityQueue,
+  findHeaderIndex,
+  formatTime,
+  findLastDepartedTrain,
+  timeToDate,
+  dateToTimeString,
+};

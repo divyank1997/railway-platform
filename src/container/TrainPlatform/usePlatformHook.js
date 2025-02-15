@@ -3,6 +3,8 @@ import {
   findHeaderIndex,
   formatTime,
   PriorityQueue,
+  timeToDate,
+  dateToTimeString,
 } from "../../helperFunctions";
 import { PRIORITY_ARR, TRAIN_STATUS } from "../../constant";
 export const useTrainPlatform = () => {
@@ -10,16 +12,6 @@ export const useTrainPlatform = () => {
   const [trainData, setTrainData] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [loading, setIsLoading] = useState(false);
-  const timeToDate = useCallback((timeStr) => {
-    const [hours, minutes] = timeStr.split(":").map((item) => Number(item));
-    const date = new Date();
-    date.setHours(hours, minutes, 0, 0);
-    return date;
-  }, []);
-
-  const dateToTimeString = useCallback((date) => {
-    return date.toTimeString().substring(0, 5);
-  }, []);
 
   // Update current time every 20 seconds
   useEffect(() => {
@@ -79,7 +71,8 @@ export const useTrainPlatform = () => {
         .filter((allocTrain) => allocTrain.platformNumber === platform)
         .sort(
           (a, b) =>
-            timeToDate(a.actualDeparture) - timeToDate(b.actualDeparture)
+            timeToDate(a.actualDeparture).getTime() -
+            timeToDate(b.actualDeparture).getTime()
         );
 
       if (trainsOnPlatform.length === 0) return trainStart;
@@ -87,7 +80,9 @@ export const useTrainPlatform = () => {
       const lastTrain = trainsOnPlatform[trainsOnPlatform.length - 1];
       const lastDeparture = timeToDate(lastTrain.actualDeparture);
 
-      return lastDeparture > trainStart ? lastDeparture : trainStart;
+      return lastDeparture.getTime() > trainStart.getTime()
+        ? lastDeparture
+        : trainStart;
     },
     [timeToDate]
   );
