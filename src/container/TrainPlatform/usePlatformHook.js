@@ -237,6 +237,10 @@ export const useTrainPlatform = () => {
   );
 
   const handlePlatformSubmit = useCallback(() => {
+    if (trainData.length === 0) {
+      alert("Please upload Csv First");
+      return;
+    }
     if (platformInput >= 2 && platformInput <= 20) {
       if (trainData.length > 0) {
         const priorityQueue = new PriorityQueue();
@@ -262,6 +266,7 @@ export const useTrainPlatform = () => {
 
   const handlePlatformNumber = useCallback((e) => {
     const { value } = e.target;
+
     if (value >= 2 && value <= 20) setPlatformInput(value);
   }, []);
 
