@@ -262,7 +262,7 @@ export const useTrainPlatform = () => {
 
   const handlePlatformNumber = useCallback((e) => {
     const { value } = e.target;
-    if (value > 2 && value < 20) setPlatformInput(value);
+    if (value >= 2 && value <= 20) setPlatformInput(value);
   }, []);
 
   const fileInputRef = useRef(null);
